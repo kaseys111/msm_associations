@@ -1,0 +1,91 @@
+<div class="page-header">
+  <h3>Movie #<%= @movie.id %></h3>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+    <img class="display" src="<%= @movie.image_url %>" />
+  </div>
+
+  <div class="col-md-9 mb-2">
+    <dl class="dl-horizontal">
+      <dt>Title</dt>
+      <dd><%= @movie.title %></dd>
+
+      <dt>Year</dt>
+      <dd><%= @movie.year %></dd>
+
+      <dt>Duration</dt>
+      <dd><%= @movie.duration %> minutes</dd>
+
+      <dt>Description</dt>
+      <dd><%= @movie.description %></dd>
+
+      <dt>Director</dt>
+      <dd><a href="/directors/<%= @movie.director_id %>"><%= Director.find(@movie.director_id).name %></a></dd>
+
+      <dt>Cast</dt>
+      <dd>
+        <ul class="list-group">
+        <% @cast.each do |character| %>
+        <li class="list-group-item"><a href="/actors/<%= character.actor_id %> "><%= Actor.find(character.actor_id).name %></a> (<%= character.name %>)</li>
+        <% end %>
+
+        <li class="list-group-item-success">Add a New Character</li>
+
+        <li class="list-group-item">
+
+          <form class="form-group" action="/create_character" method="post">
+
+            <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+            <div class="form-group">
+              <label for="actor_id" class="control-label">
+                Actor
+              </label>
+
+              <select class="form-control" id="actor_id" name="actor_id">
+                <% @allactors.each do |actor| %>
+                  <option value="<%= actor.id %>">
+                    <%= actor.name %>
+                  </option>
+                <% end %>
+              </select>
+              <a href="/actors/new">or add new actor</a>
+            </div>
+
+            <div class="form-group">
+              <label for="name" class="control-label">
+                Name
+              </label>
+
+              <input type="text" id="name" name="name" placeholder="Name" class="form-control" value="<%= @character.name %>">
+
+              <input type="hidden" name="movie_id" value="<%= @movie.id %>">
+            </div>
+
+            <button class="btn btn-success">
+              Create Movie
+            </button>
+            or
+            <a href="/movies">Cancel</a>
+
+          </form>
+        </li>
+      </ul>
+    </dd>
+    </dl>
+
+    <div class="btn-group btn-group-justified">
+      <a href="/movies" class="btn btn-primary">
+        Back
+      </a>
+      <a href="/movies/<%= @movie.id %>/edit" class="btn btn-warning">
+        Edit
+      </a>
+      <a href="/delete_movie/<%= @movie.id %>" class="btn btn-danger" rel="nofollow">
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
